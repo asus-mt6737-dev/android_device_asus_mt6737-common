@@ -18,8 +18,8 @@
 
 set -e
 
-DEVICE=pine
-VENDOR=sony
+DEVICE=mt6737-common
+VENDOR=asus
 
 # Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"

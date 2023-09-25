@@ -11,11 +11,11 @@ import init.microtrust.rc
 import meta_init.connectivity.rc
 import meta_init.project.rc
 import meta_init.c2k.rc
-import init.sony-trimarea.rc
 #Make sure meta_init.modem.rc is the last rc file.
 import meta_init.modem.rc
-
-
+# dingyisheng@wind-mobi.com 20161115 begin
+import init.trustkernel.rc
+# dingyisheng@wind-mobi.com 20161115 end
 on early-init
     # Set init and its forked children's oom_adj.
     write /proc/1/oom_score_adj -1000
@@ -418,8 +418,6 @@ on boot
     hostname localhost
     domainname localdomain
 
-    setprop logmuch.detect.value 10000
-
 #INTERNAL_START
     class_start default
 #INTERNAL_END
@@ -505,7 +503,7 @@ service meta_tst /vendor/bin/meta_tst
 service nvram_daemon /vendor/bin/nvram_daemon
     class main
     user root
-    group system trimarea
+    group system
     oneshot
 
 service fuelgauged /system/bin/fuelgauged

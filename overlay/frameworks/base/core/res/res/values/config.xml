@@ -28,35 +28,25 @@
         <item>"ap0"</item>
     </string-array>
 
+    <!-- List of regexpressions describing the interface (if any) that represent tetherable
+         USB interfaces.  If the device doesn't want to support tething over USB this should
+         be empty.  An example would be "usb.*" -->
     <string-array translatable="false" name="config_tether_usb_regexs">
+        <item>"usb\\d"</item>
         <item>"rndis\\d"</item>
     </string-array>
 
+    <!-- List of regexpressions describing the interface (if any) that represent tetherable
+         bluetooth interfaces.  If the device doesn't want to support tethering over bluetooth this
+         should be empty. -->
     <string-array translatable="false" name="config_tether_bluetooth_regexs">
+        <item>"bnep\\d"</item>
         <item>"bt-pan"</item>
-	<item>"bt-dun"</item>
     </string-array>
 
     <!-- Flag indicating whether the we should enable the automatic brightness in Settings.
          Software implementation will be used if config_hardware_auto_brightness_available is not set -->
     <bool name="config_automatic_brightness_available">true</bool>
-    
-    <!-- Indicate whether the lid state impacts the accessibility of
-         the physical keyboard.  0 means it doesn't, 1 means it is accessible
-         when the lid is open, 2 means it is accessible when the lid is
-         closed.  The default is 0. -->
-    <integer name="config_lidKeyboardAccessibility">1</integer>
-
-    <!-- Indicate whether the lid state impacts the accessibility of
-         the navigation buttons.  0 means it doesn't, 1 means it is accessible
-         when the lid is open, 2 means it is accessible when the lid is
-         closed.  The default is 0. -->
-    <integer name="config_lidNavigationAccessibility">1</integer>
-
-    <!-- Indicate whether closing the lid causes the device to go to sleep and opening
-         it causes the device to wake up.
-         The default is false. -->
-    <bool name="config_lidControlsSleep">true</bool>
 
     <!-- Indicate whether to allow the device to suspend when the screen is off
          due to the proximity sensor.  This resource should only be set to true
@@ -81,21 +71,6 @@
         <item>500</item>
     </integer-array>
 
-    <!-- Default color for notification LED. -->
-    <color name="config_defaultNotificationColor">#ff000080</color>
-
-    <!-- Default LED off time for notification LED in milliseconds. -->
-    <integer name="config_defaultNotificationLedOff">0</integer>
-
-    <!-- Default value for led color when battery is low on charge -->
-    <integer name="config_notificationsBatteryLowARGB">0xFF100000</integer>
-
-    <!-- Default value for led color when battery is medium charged -->
-    <integer name="config_notificationsBatteryMediumARGB">0xFF202000</integer>
-
-    <!-- Default value for led color when battery is fully charged -->
-    <integer name="config_notificationsBatteryFullARGB">0xFF004000</integer>
-
     <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveNotificationLed">true</bool>
 
@@ -118,20 +93,6 @@
          For example, a device with Home, Back and Menu keys would set this
          config to 7. -->
     <integer name="config_deviceHardwareKeys">64</integer>
-
-    <!-- Hardware keys present on the device with the ability to wake, stored as a bit field.
-         This integer should equal the sum of the corresponding value for each
-         of the following keys present:
-             1 - Home
-             2 - Back
-             4 - Menu
-             8 - Assistant (search)
-            16 - App switch
-            32 - Camera
-            64 - Volume rocker
-         For example, a device with Home, Back and Menu keys would set this
-         config to 7. -->
-    <integer name="config_deviceHardwareWakeKeys">64</integer>
 
     <!-- Screen brightness used to dim the screen when the user activity
          timeout expires.  May be less than the minimum allowed brightness setting
@@ -177,22 +138,6 @@
         <item>49,1</item>
     </string-array>
 
-    <!-- List of regexpressions describing the interface (if any) that represent tetherable
-         USB interfaces.  If the device doesn't want to support tething over USB this should
-         be empty.  An example would be "usb.*" -->
-    <string-array translatable="false" name="config_tether_usb_regexs">
-        <item>"usb\\d"</item>
-        <item>"rndis\\d"</item>
-    </string-array>
-
-    <!-- List of regexpressions describing the interface (if any) that represent tetherable
-         bluetooth interfaces.  If the device doesn't want to support tethering over bluetooth this
-         should be empty. -->
-    <string-array translatable="false" name="config_tether_bluetooth_regexs">
-        <item>"bnep\\d"</item>
-        <item>"bt-pan"</item>
-    </string-array>
-
     <!-- Array of ConnectivityManager.TYPE_xxxx values allowable for tethering -->
     <!-- Common options are [1, 4] for TYPE_WIFI and TYPE_MOBILE_DUN or
     <!== [0,1,5,7] for TYPE_MOBILE, TYPE_WIFI, TYPE_MOBILE_HIPRI and TYPE_BLUETOOTH -->
@@ -207,12 +152,6 @@
 
     <!-- Boolean indicating whether the wifi chipset has dual frequency band support -->
     <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
-
-    <!-- Boolean indicating whether the wifi chipset supports background scanning mechanism.
-         This mechanism allows the host to remain in suspend state and the dongle to actively
-         scan and wake the host when a configured SSID is detected by the dongle. This chipset
-         capability can provide power savings when wifi needs to be always kept on. -->
-    <bool translatable="false" name="config_wifi_background_scan_support">true</bool>
 
     <!-- Boolean indicating if current platform supports BLE peripheral mode -->
     <bool name="config_bluetooth_le_peripheral_mode_supported">true</bool>
@@ -264,8 +203,10 @@
 
     <!-- Remote server that can provide NTP responses. -->
     <string translatable="false" name="config_ntpServer">europe.pool.ntp.org</string>
+
     <!-- Try-again polling interval in milliseconds, in case the network request failed -->
     <integer name="config_ntpPollingIntervalShorter">30000</integer>
+
     <!-- Number of times to try again with the shorter interval, before backing
          off until the normal polling interval. A value < 0 indicates infinite. -->
     <integer name="config_ntpRetry">30</integer>
@@ -282,18 +223,16 @@
 
     <!-- If supported, are dreams enabled? (by default) -->
     <bool name="config_dreamsEnabledByDefault">false</bool>
+
     <!-- If supported and enabled, are dreams activated when docked? (by default) -->
     <bool name="config_dreamsActivatedOnDockByDefault">false</bool>
+
     <!-- If supported and enabled, are dreams activated when asleep and charging? (by default) -->
     <bool name="config_dreamsActivatedOnSleepByDefault">false</bool>
 
     <!-- Base "touch slop" value used by ViewConfiguration as a
          movement threshold where scrolling should begin. -->
     <dimen name="config_viewConfigurationTouchSlop">4dp</dimen>
-
-    <!-- If true, then we do not ask user for permission for apps to connect to USB devices.
-         Do not set this to true for production devices. Doing so will cause you to fail CTS. -->
-    <bool name="config_disableUsbPermissionDialogs">true</bool>
 
     <!-- Safe headphone volume index. When music stream volume is below this index
     the SPL on headphone output is compliant to EN 60950 requirements for portable music
@@ -304,11 +243,12 @@
     <!-- Whether the default microphone audio source supports near-ultrasound frequencies
          (range of 18 - 21 kHz). -->
     <bool name="config_supportMicNearUltrasound">false</bool>
+
     <!-- Whether the default speaker audio output path supports near-ultrasound frequencies
          (range of 18 - 21 kHz). -->
     <bool name="config_supportSpeakerNearUltrasound">false</bool>
 
-  <!-- Stability requirements in milliseconds for accepting a new brightness level.  This is used
+    <!-- Stability requirements in milliseconds for accepting a new brightness level. This is used
          for debouncing the light sensor.  Different constants are used to debounce the light sensor
          when adapting to brighter or darker environments.  This parameter controls how quickly
          brightness changes occur in response to an observed change in light level that exceeds the
@@ -327,9 +267,6 @@
                cell broadcasting sms, and MMS. -->
     <bool name="config_sms_capable">false</bool>
 
-    <!-- Boolean indicating whether the wifi chipset has dual frequency band support -->
-    <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
-
     <!-- Default list of files pinned by the Pinner Service -->
     <string-array name="config_defaultPinnerServiceFiles">
         <item>/system/framework/arm/boot.oat</item>
@@ -337,10 +274,6 @@
         <item>/system/framework/arm64/boot-core-libart.oat</item>
         <item>/system/framework/arm/boot-core-libart.oat</item>
     </string-array>
-
-     <!-- Whether a software navigation bar should be shown. NOTE: in the future this may be
-         autodetected from the Configuration. -->
-    <bool name="config_showNavigationBar">true</bool>
 
     <bool name="config_enableWifiDisplay">true</bool>
 
@@ -351,23 +284,9 @@
          rotations as the default behavior. -->
     <bool name="config_allowAllRotations">true</bool>
 
-    <!-- If supported, are dreams enabled? (by default) -->
-    <bool name="config_dreamsEnabledByDefault">true</bool>
-
-    <!-- Control the behavior when the user long presses the home button.
-            0 - Nothing
-            1 - Launch all apps intent
-            2 - Launch assist intent
-         This needs to match the constants in
-         policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
-    -->
-    <integer name="config_longPressOnHomeBehavior">2</integer>
-
     <!-- When true use the linux /dev/input/event subsystem to detect the switch changes
          on the headphone/microphone jack. When false use the older uevent framework. -->
     <bool name="config_useDevInputEventForAudioJack">false</bool>
-
-
 
     <!-- If this is true, the screen will come on when you plug/unplug usb/power/whatever. -->
     <bool name="config_unplugTurnsOnScreen">true</bool>
@@ -392,24 +311,16 @@
     <!--  Whether Multiuser UI should be shown -->
     <bool name="config_enableMultiUserUI">true</bool>
     
-   <!-- Indicate whether closing the lid causes the device to go to sleep and opening
-         it causes the device to wake up.
-         The default is false. -->
-    <bool name="config_lidControlsSleep">true</bool>
-    
     <!-- Enable doze mode
          ComponentName of a dream to show whenever the system would otherwise have gone to sleep. -->
     <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
-    
-    <!-- If true, the doze component is not started until after the screen has been turned off
-         and the screen off animation has been performed. -->
-    <!-- <bool name="config_dozeAfterScreenOffByDefault">true</bool> -->
+
     <!-- Specifies whether to decouple the interactive state of the device from the display on/off state. -->
     <bool name="config_powerDecoupleInteractiveModeFromDisplay">true</bool>
+
     <!-- Auto Power Modes is required for Doze and App Standby -->
     <bool name="config_enableAutoPowerModes">true</bool>
-    <!-- Whether to allow process with media UID to access CameraServiceProxy -->
-    <!-- <bool name="config_allowMediaUidForCameraServiceProxy">true</bool> -->
+
     <!-- Screen brightness used to dim the screen while dozing in a very low power state.
          May be less than the minimum allowed brightness setting
          that can be set by the user. -->

@@ -1,13 +1,13 @@
 [
   {
-    "target_path": "kernel/sony/pine",
-    "repository":  "PineDevelopment/android_kernel_sony_pine",
+    "target_path": "kernel/asus/mt6737",
+    "repository":  "asus-mt6737-dev/android_kernel_asus_mt6737",
     "remote":      "github",
     "revision":    "cm-14.1"
   },
   {
-    "target_path": "vendor/sony/pine",
-    "repository":  "PineDevelopment/android_vendor_sony_pine",
+    "target_path": "vendor/asus/mt6737-common",
+    "repository":  "asus-mt6737-dev/android_vendor_asus_mt6737-common",
     "remote":      "github",
     "revision":    "cm-14.1
   }

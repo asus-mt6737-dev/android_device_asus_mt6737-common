@@ -1,4 +1,7 @@
-import meta_init.c2k.rc
+#xiongshigui@wind-mobi.com 20161125 add begin
+on init	
+    mkdir /factory 0700 root root	
+#xiongshigui@wind-mobi.com 20161125 add end
 
 on post-fs
 
@@ -19,6 +22,10 @@ on post-fs
     #insmod /vendor/lib/modules/wlan.ko
 
 
+#xiongshigui@wind-mobi.com 20161125 add begin
+on post-fs-data		
+    restorecon_recursive /factory
+#xiongshigui@wind-mobi.com 20161125 add end
 on boot
 
 

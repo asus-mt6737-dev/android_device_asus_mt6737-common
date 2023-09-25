@@ -10,10 +10,6 @@ import /init.${ro.hardware}.rc
 import /init.usb.configfs.rc
 import /init.${ro.zygote}.rc
 
-# Include CM's extra init file
-import /init.cm.rc
-
-
 on early-init
     # Set init and its forked children's oom_adj.
     write /proc/1/oom_score_adj -1000
@@ -43,6 +39,10 @@ on init
     symlink /system/etc /etc
     symlink /sys/kernel/debug /d
 
+    #add by liuyang@wind-mobi.com 20180509 begin
+    # Link /factory/persist to /persist for GDPR without a persist partition.
+    symlink /factory/persist /persist
+    #add by liuyang@wind-mobi.com 20180509 end
     # Link /vendor to /system/vendor for devices without a vendor partition.
     symlink /system/vendor /vendor
 
@@ -227,10 +227,6 @@ on init
     chown system log /sys/fs/pstore/pmsg-ramoops-0
     chmod 0440 /sys/fs/pstore/pmsg-ramoops-0
 
-	# Fix  psensor calbration issue 20161012 by winning
-	chmod 0777 /sys/bus/platform/drivers/als_ps/set_threshold
-	chmod 0777 /sys/bus/platform/drivers/als_ps/als_dyn_c_gain
-	
     # enable armv8_deprecated instruction hooks
     write /proc/sys/abi/swp 1
 
@@ -303,7 +299,7 @@ on post-fs
     mkdir /cache/recovery 0770 system cache
 
     # Backup/restore mechanism uses the cache partition
-    mkdir /cache/backup_stage 0750 system cache
+    mkdir /cache/backup_stage 0700 system system
     mkdir /cache/backup 0700 system system
 
     #change permissions on vmallocinfo so we can grab it from bugreports
@@ -427,12 +423,6 @@ on post-fs-data
 
     # Separate location for storing security policy files on data
     mkdir /data/security 0711 system system
-# //>2015/12/07-Jack, change attribute to nfc owner
-# //>2015/09/08-Jack, Proting NFC PN544
-    mkdir /data/nfc 0755 nfc nfc
-    #mkdir /etc/param
-# //>2015/09/08-Jack	
-# //>2015/12/07-Jack
 
     # Create all remaining /data root dirs so that they are made through init
     # and get proper encryption policy installed
@@ -456,8 +446,6 @@ on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
     mkdir /data/media/obb 0770 media_rw media_rw
 
-    mkdir /data/app-skin 0771 system system
-
     init_user0
 
     # Reload policy from /data/security if present.
@@ -469,17 +457,17 @@ on post-fs-data
     # Check any timezone data in /data is newer than the copy in /system, delete if not.
     exec - system system -- /system/bin/tzdatacheck /system/usr/share/zoneinfo /data/misc/zoneinfo
 
+    #zhangyanbin@wind-mobi.com add 20170316 for delete asus ota fota begin
+    #delete delta package file in marshmallow path
+    #rm /data/dlpkgfile
+    #rm /data/data/com.asus.dm/files/dlpkgfile
+    #zhangyanbin@wind-mobi.com add 20170316 for delete asus ota fota end
+
     # If there is no fs-post-data action in the init.<device>.rc file, you
     # must uncomment this line, otherwise encrypted filesystems
     # won't work.
     # Set indication (checked by vold) that we have finished this action
     #setprop vold.post_fs_data_done 1
-    
-    # taimport ready, use this as trigger for multi-cdf-symlinker
-    setprop init.taimport.ready true
-    
-    # set nvram ready for los14.1 added by rote66
-    setprop service.nvram_init Ready
 
 on boot
     # basic network init
@@ -542,7 +530,10 @@ on boot
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
     chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
-
+    #add by dingyisheng@wind-mobi 20180426 start
+    chmod 0664 /proc/driver/camera_res
+    #add by dingyisheng@wind-mobi 20180426 start
+	
     # Assume SMP uses shared cpufreq policy for all CPUs
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
@@ -567,11 +558,6 @@ on boot
     chown system system /sys/kernel/ipv4/tcp_rmem_def
     chown system system /sys/kernel/ipv4/tcp_rmem_max
     chown root radio /proc/cmdline
-# //>2015/09/08-Jack, Proting NFC PN544
-    setprop ro.nfc.port "I2C"
-    chmod 0660 /dev/pn544
-    chown nfc nfc /dev/pn544
-# //>2015/09/08-Jack
 
     # Define default initial receive window size in segments.
     setprop net.tcp.default_init_rwnd 60
@@ -580,7 +566,7 @@ on boot
 
 on nonencrypted
     # A/B update verifier that marks a successful boot.
-    exec - root -- /system/bin/update_verifier nonencrypted
+    exec - root cache -- /system/bin/update_verifier nonencrypted
     class_start main
     class_start late_start
 
@@ -603,12 +589,12 @@ on property:vold.decrypt=trigger_post_fs_data
 
 on property:vold.decrypt=trigger_restart_min_framework
     # A/B update verifier that marks a successful boot.
-    exec - root -- /system/bin/update_verifier trigger_restart_min_framework
+    exec - root cache -- /system/bin/update_verifier trigger_restart_min_framework
     class_start main
 
 on property:vold.decrypt=trigger_restart_framework
     # A/B update verifier that marks a successful boot.
-    exec - root -- /system/bin/update_verifier trigger_restart_framework
+    exec - root cache -- /system/bin/update_verifier trigger_restart_framework
     class_start main
     class_start late_start
 
@@ -666,41 +652,25 @@ service flash_recovery /system/bin/install-recovery.sh
     class main
     oneshot
 
+#xuyi@wind-mobi.com 20161126 add for BugReporter begin
+on property:persist.asus.savelogs=*
+    start savelogs
 
+service savelogs /system/bin/savelogs.sh
+    class late_start
+    user root
+    group sdcard_rw
+    oneshot
+    disabled
+seclabel u:r:savelogmtp:s0	
 
-#by major, 2015.11.23, to porting multicdf featuer FP9239
-# set up symbolic links to proper configuration file
-#service config-linker /system/bin/multi-cdf-symlinker.sh
-#    class main
-#    user system
-#   group system
-#    disabled
-#    oneshot
+service savelogscomplete  /system/bin/savelogs_complete.sh
+	user root
+    group root
+	oneshot
+	disabled
+seclabel u:r:zygote:s0
 
-
-# Note! that there is a dependency towards taimport property
-# the property is set immediatly after execution of taimport.
-#on property:init.taimport.ready=true
-#    mkdir /data/customization 0755 system system
-#   mkdir /data/customization/ota-config 0755 system system
-#    restorecon /data/customization
-#    start config-linker
-
-# Config file updater
-#service ota-updater /system/bin/ota-config-updater.sh
-#    class main
-#    user system
-#    group system
-#    disabled
-#    oneshot
-
-# init.d support
-service sysinit /system/bin/logwrapper /system/xbin/busybox run-parts /system/etc/init.d
-user root
-disabled
-oneshot
-
-on property:sys.init.d=on
-start sysinit
-
-
+on property:persist.asus.savelogs.complete=1
+	start savelogscomplete
+#xuyi@wind-mobi.com 20161126 add for BugReporter end

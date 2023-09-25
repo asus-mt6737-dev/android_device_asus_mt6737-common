@@ -15,6 +15,6 @@
 #
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(TARGET_DEVICE),pine)
+ifneq ($(filter X008 X008_1,$(TARGET_DEVICE)),)
 include $(call all-makefiles-under,$(LOCAL_PATH))
 endif

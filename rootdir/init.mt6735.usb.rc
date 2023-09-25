@@ -51,16 +51,14 @@ on property:sys.usb.config=acm
     setprop sys.usb.state ${sys.usb.config}
 
 #2.adb
-# [Arima_8100][bozhi_lin] apply sony usb pid vid add adb only 20170329 begin
-#on property:sys.usb.config=adb
-#    write /sys/class/android_usb/android0/enable 0
-#    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-#    write /sys/class/android_usb/android0/idProduct 201C
-#    write /sys/class/android_usb/android0/functions ${sys.usb.config}
-#    write /sys/class/android_usb/android0/enable 1
-#    start adbd
-#    setprop sys.usb.state ${sys.usb.config}
-# [Arima_8100][bozhi_lin] 20170329 end
+on property:sys.usb.config=adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
+    write /sys/class/android_usb/android0/idProduct 201C
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
 
 #3.adb,acm
 on property:sys.usb.config=adb,acm
@@ -93,15 +91,13 @@ on property:sys.usb.config=mass_storage,adb
     setprop sys.usb.state ${sys.usb.config}
 
 #6.mtp
-# [Arima_8100][bozhi_lin] apply sony usb pid vid 20161113 begin
-#on property:sys.usb.config=mtp
-#    write /sys/class/android_usb/android0/enable 0
-#    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-#    write /sys/class/android_usb/android0/idProduct 2008
-#    write /sys/class/android_usb/android0/functions ${sys.usb.config}
-#    write /sys/class/android_usb/android0/enable 1
-#    setprop sys.usb.state ${sys.usb.config}
-# [Arima_8100][bozhi_lin] 20161113 end
+on property:sys.usb.config=mtp
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
+    write /sys/class/android_usb/android0/idProduct 2008
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
 
 #7.mtp,acm
 on property:sys.usb.config=mtp,acm
@@ -114,16 +110,14 @@ on property:sys.usb.config=mtp,acm
     setprop sys.usb.state ${sys.usb.config}
 
 #8.mtp,adb
-# [Arima_8100][bozhi_lin] apply sony usb pid vid 20161113 begin
-#on property:sys.usb.config=mtp,adb
-#    write /sys/class/android_usb/android0/enable 0
-#    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-#    write /sys/class/android_usb/android0/idProduct 201D
-#    write /sys/class/android_usb/android0/functions mtp,adb
-#    write /sys/class/android_usb/android0/enable 1
-#    start adbd
-#    setprop sys.usb.state ${sys.usb.config}
-# [Arima_8100][bozhi_lin] 20161113 end
+on property:sys.usb.config=mtp,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
+    write /sys/class/android_usb/android0/idProduct 201D
+    write /sys/class/android_usb/android0/functions mtp,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
 
 #9.mtp,adb,acm
 on property:sys.usb.config=mtp,adb,acm
@@ -215,16 +209,14 @@ on property:sys.usb.config=ptp,mass_storage,adb
     setprop sys.usb.state ${sys.usb.config}
 
 #18.rndis
-# [Arima_8100][bozhi_lin] apply sony usb pid vid 20161113 begin
-#on property:sys.usb.config=rndis
-#    write /sys/class/android_usb/android0/enable 0
-#    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-#    write /sys/class/android_usb/android0/idProduct 2004
-#    write /sys/class/android_usb/android0/functions ${sys.usb.config}
-#    write /sys/class/android_usb/android0/bDeviceClass 224
-#    write /sys/class/android_usb/android0/enable 1
-#    setprop sys.usb.state ${sys.usb.config}
-# [Arima_8100][bozhi_lin] 20161113 end
+on property:sys.usb.config=rndis
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
+    write /sys/class/android_usb/android0/idProduct 2004
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/bDeviceClass 224
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
 
 #19.rndis,acm
 on property:sys.usb.config=rndis,acm
@@ -237,16 +229,14 @@ on property:sys.usb.config=rndis,acm
     setprop sys.usb.state ${sys.usb.config}
 
 #20.rndis,adb
-# [Arima_8100][bozhi_lin] apply sony usb pid vid 20161113 begin
-#on property:sys.usb.config=rndis,adb
-#    write /sys/class/android_usb/android0/enable 0
-#    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-#    write /sys/class/android_usb/android0/idProduct 2005
-#    write /sys/class/android_usb/android0/functions ${sys.usb.config}
-#    write /sys/class/android_usb/android0/enable 1
-#    start adbd
-#    setprop sys.usb.state ${sys.usb.config}
-# [Arima_8100][bozhi_lin] 20161113 end
+on property:sys.usb.config=rndis,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
+    write /sys/class/android_usb/android0/idProduct 2005
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
 
 #21.rndis,adb,acm
 on property:sys.usb.config=rndis,adb,acm
@@ -482,15 +472,13 @@ on property:sys.usb.config=eem,adb,acm
     setprop sys.usb.state ${sys.usb.config}
 
 # USB midi configuration
-# [Arima_8100][bozhi_lin] apply sony usb pid vid 20161113 begin
-#on property:sys.usb.config=midi
-#	write /sys/class/android_usb/android0/enable 0
-#    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-#	write /sys/class/android_usb/android0/idProduct 2046
-#	write /sys/class/android_usb/android0/functions ${sys.usb.config}
-#	write /sys/class/android_usb/android0/enable 1
-#	setprop sys.usb.state ${sys.usb.config}
-# [Arima_8100][bozhi_lin] 20161113 end
+on property:sys.usb.config=midi
+	write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
+	write /sys/class/android_usb/android0/idProduct 2046
+	write /sys/class/android_usb/android0/functions ${sys.usb.config}
+	write /sys/class/android_usb/android0/enable 1
+	setprop sys.usb.state ${sys.usb.config}
 
 # USB midi configuration, with acm
 on property:sys.usb.config=midi,acm
@@ -503,16 +491,14 @@ on property:sys.usb.config=midi,acm
 	setprop sys.usb.state ${sys.usb.config}
 
 # USB midi configuration, with adb
-# [Arima_8100][bozhi_lin] apply sony usb pid vid 20161113 begin
-#on property:sys.usb.config=midi,adb
-#	write /sys/class/android_usb/android0/enable 0
-#    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-#	write /sys/class/android_usb/android0/idProduct 2048
-#	write /sys/class/android_usb/android0/functions ${sys.usb.config}
-#	write /sys/class/android_usb/android0/enable 1
-#	start adbd
-#	setprop sys.usb.state ${sys.usb.config}
-# [Arima_8100][bozhi_lin] 20161113 end
+on property:sys.usb.config=midi,adb
+	write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
+	write /sys/class/android_usb/android0/idProduct 2048
+	write /sys/class/android_usb/android0/functions ${sys.usb.config}
+	write /sys/class/android_usb/android0/enable 1
+	start adbd
+	setprop sys.usb.state ${sys.usb.config}
 
 # USB midi configuration, with adb acm
 on property:sys.usb.config=midi,adb,acm

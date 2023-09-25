@@ -48,8 +48,8 @@ LOCAL_SRC_FILES:= \
 	RefBaseDump.cpp
 
 LOCAL_C_INCLUDES:= \
-	$(TOP)/device/sony/pine/mediatek/graphics/ui_ext/inc \
-	$(TOP)/device/sony/pine/mediatek/graphics/gralloc_extra/include \
+	$(TOP)/device/asus/mt6737-common/mediatek/graphics/ui_ext/inc \
+	$(TOP)/device/asus/mt6737-common/mediatek/graphics/gralloc_extra/include \
 	external/libpng \
 	external/zlib \
 	external/skia/src/images \

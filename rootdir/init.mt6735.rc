@@ -14,53 +14,28 @@ import init.trustonic.rc
 import init.microtrust.rc
 import init.common_svc.rc
 import init.c2k.rc
-import init.sony-trimarea.rc
-import init.sony-bootstrap.rc
-import init.sony-security.rc
-import init.sony-fota.rc
-import init.sony-enterprise.rc
-import init.sony-ramdump.rc
-import init.sony-idd.rc
-import init.sony-crashhandling.rc
-import init.qns.rc
-
+# dingyisheng@wind-mobi.com 20161115 begin
+import init.trustkernel.rc
+# dingyisheng@wind-mobi.com 20161115 end
 # init.modem.rc must be the LAST rc file because vold.post_fs_data_done is set in it
 import init.modem.rc
 # *** DO NOT import the new rc file after this line ***
-#//<2015/11/20-ychuang, [S1][TA][M] Implement TA Backup / Restore.
-import init.arima-s1.rc
-#//<2015/11/20-ychuang
-
-import init.charge_loggingd.rc
 
 on early-init
     write /proc/bootprof "INIT:early-init"
     mount debugfs debugfs /sys/kernel/debug
     chmod 0755 /sys/kernel/debug
 
-    # TA
-    setprop arima.ftboot 1
-    setprop arima.ta_rf_rs 1
-    setprop persist.mtk_usp_md_sbp_code 2
-    setprop persist.radio.cfu.querytype 0
-
-    # Disable IMS
-    setprop persist.mtk_epdg_support 0
-    setprop persist.mtk_ims_support 0
-
-    # RIL
-    setprop ril.data.mal 0
-
 on init
-
     # Support legacy paths
     symlink /sdcard /mnt/sdcard
 
     # if primary storage is physical, set ro.vold.primary_physical to 1
     # setprop ro.vold.primary_physical 1
 
-    # Expose exp_main
-    setprop persist.aee.preserve.main enable
+    # BATTERY proc
+    chown shell system /proc/mtk_battery_cmd/current_cmd
+    chown shell system /proc/mtk_battery_cmd/discharging_cmd
 
 # Temp Backward compatibility
     mkdir /protect_f 0771 system system
@@ -77,7 +52,22 @@ on init
     chmod 0660 /proc/lk_env
 
     chmod 0666 /dev/kmsg
+#hebiao@wind-mobi.com 20160324 add begin
+	service qmcX983d /system/bin/qmcX983d
+    disabled
+	user system
+    group system
+    class main
+	oneshot
+#hebiao@wind-mobi.com 20160324 add end
 
+##ranyanhao@wind-mobi.com add config of msensor at 20160216 begin
+service memsicd3524x /system/bin/memsicd3524x
+     disabled
+	 user system
+    group system
+    class main
+##ranyanhao@wind-mobi.com add config of msensor at 20160216 end	
 # increase sysctl_rmem_max and sysctl_wmem_max values to 2M
     write /proc/sys/net/core/wmem_max 8388608
     write /proc/sys/net/core/rmem_max 8388608
@@ -98,26 +88,6 @@ on property:persist.mediatek.fg.log.enable=1
 
 on charger
     mount ext4 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/system /system ro wait
-    #mount Qnovo
-    mkdir /qns 0750 qns qns
-    wait /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/Qnovo
-    mount ext4 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/Qnovo /qns nosuid nodev noatime noexec barrier=0 discard
-    chown qns qns /qns
-    chmod 0750 /qns
-    restorecon_recursive /qns
-    chown qns qns /sys/class/qns
-    chown qns qns /sys/class/qns/alarm
-    chown qns qns /sys/class/qns/battery_type
-    chown qns qns /sys/class/qns/charge_current
-    chown qns qns /sys/class/qns/charging_state
-    chown qns qns /sys/class/qns/current_now
-    chown qns qns /sys/class/qns/design
-    chown qns qns /sys/class/qns/fcc
-    chown qns qns /sys/class/qns/options
-    chown qns qns /sys/class/qns/soc
-    chown qns qns /sys/class/qns/temp
-    chown qns qns /sys/class/qns/voltage
-    start qns
 		chmod 0666 /dev/kmsg
 		write /sys/devices/platform/battery_meter/FG_daemon_log_level 7
     start fuelgauged
@@ -131,37 +101,10 @@ on fs
     exec /system/bin/tune2fs -O has_journal -u 10010 -r 4096 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/userdata
     write /sys/kernel/debug/tracing/trace_marker "E"
     write /proc/bootprof "INIT:Mount_END"
-    #mount Qnovo
-    mkdir /qns 0750 qns qns
-    wait /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/Qnovo
-    mount ext4 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/Qnovo /qns nosuid nodev noatime noexec barrier=0 discard
-    chown qns qns /qns
-    chmod 0750 /qns
-    restorecon_recursive /qns
-
-#[SM31]create lta-label path for FP019295 Legal Documents in Settings start
-    mkdir /lta-label 0555 system system
-    wait /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/ltalabel
-    chown system system /lta-label
-    chmod 0555 /lta-label
-    mount ext4 /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/ltalabel /lta-label nosuid nodev noatime noexec ro barrier=0 context=u:object_r:lta_label:s0
-#[SM31]create lta-label path for FP019295 Legal Documents in Settings end
-
-#//<20161102-PersonLiu, [FP14084]Support exFAT filesystem
-# Install exfat module to support exfat file system
-    insmod /system/lib/modules/texfat.ko
-#//<20161102-PersonLiu
 
 on fs
 
-# [Arima_8100][bozhi_lin] enable usb cd-rom function 20170124 begin
-   #mount iso9660 loop@/vendor/etc/iAmCdRom.iso /mnt/cd-rom ro
-   mount iso9660 loop@/system/etc/dop.iso /mnt/cd-rom ro
-# [Arima_8100][bozhi_lin] 20170124 end
-
-# PerfServiceNative symlink
-  ln -sf /system/vendor/lib/libperfservicenative.so /system/lib/libperfservicenative.so
-  ln -sf /system/vendor/lib64/libperfservicenative.so /system/lib64/libperfservicenative.so
+   mount iso9660 loop@/vendor/etc/iAmCdRom.iso /mnt/cd-rom ro
 
 on post-fs
     write /proc/bootprof "INIT:post-fs"
@@ -222,9 +165,6 @@ on post-fs-data
     # extend timeout to 10 secs for loading MD images
     write /sys/class/firmware/timeout 10
 
-    # Create directory for font change support
-    exec u:r:font_selector_make_dir:s0 system -- /system/bin/font-selector-make-dir.sh
-
 # GPS
     mkdir /data/gps_mnl 0771 gps system
     mkdir /data/misc/gps 0770 gps system
@@ -232,13 +172,7 @@ on post-fs-data
     # NFC
     mkdir /data/nfc_socket 0771 nfc radio
 
-#copy status files from cache partition to internal sdcard at post-fs-data
-     exec u:r:fota-init:s0 -- /system/bin/sh /system/etc/post-fs-data-fota.sh
 # -----------------------
-
-    #change partition permission
-    exec /vendor/etc/partition_permission.sh
-
 # Add by MTK
     # md32 boot
     chown root system /dev/md32
@@ -249,8 +183,7 @@ on post-fs-data
 
     # dhcp server
     mkdir /data/misc/dhcp 0770 dhcp wifi
-    #chown dhcp wifi /data/misc/dhcp
-    chown dhcp system /data/misc/dhcp
+    chown dhcp wifi /data/misc/dhcp
 
     # dhcpv6 server
     mkdir /data/misc/wide-dhcpv6 0770 dhcp wifi
@@ -406,10 +339,8 @@ on post-fs-data
     chown system system /sys/class/misc/m_baro_misc/barodelay
     chown system system /sys/class/misc/m_baro_misc/barobatch
     chown system system /sys/class/misc/m_baro_misc/baroflush
-#<--[SM31][Sensors][JasonHsing] G-sensor mxc400x daemon porting 20161221 BEGIN --
-	#memsic acc
-	#chmod 0755 /vendor/bin/memsicp
-#-->[SM31][Sensors][JasonHsing] G-sensor mxc400x daemon porting 20161221 END --
+
+
     #Accdet
     chown root radio /sys/devices/platform/Accdet_Driver/driver/accdet_call_state
 
@@ -596,6 +527,13 @@ on post-fs-data
     chmod 0660 /dev/kd_camera_hw_bus2
     chmod 0660 /dev/FM50AF
     chmod 0660 /dev/CAM_CAL_DRV
+    # modified by lifengxiang@wind-mobi.com 20160322 begin
+    chmod 0660 /dev/OV13853_CAM_CAL_DRV
+    # modified by lifengxiang@wind-mobi.com 20160322 end
+    # modified by zhaozhensen@wind-mobi.com 20160619 begin
+    chmod 0660 /dev/S5K3L8_CAM_CAL_DRV
+    chmod 0660 /dev/S5K3M2_CAM_CAL_DRV
+    # modified by zhaozhensen@wind-mobi.com 20160619 end
 
     chown system camera /dev/camera-sysram
     chown system camera /dev/camera-isp
@@ -606,6 +544,13 @@ on post-fs-data
     chown system camera /dev/kd_camera_hw_bus2
     chown system camera /dev/FM50AF
     chown system camera /dev/CAM_CAL_DRV
+    # modified by lifengxiang@wind-mobi.com 20160322 begin
+    chown system camera /dev/OV13853_CAM_CAL_DRV
+    # modified by lifengxiang@wind-mobi.com 20160322 end
+    # modified by zhaozhensen@wind-mobi.com 20160619 begin
+    chown system camera /dev/S5K3L8_CAM_CAL_DRV
+    chown system camera /dev/S5K3M2_CAM_CAL_DRV
+    # modified by zhaozhensen@wind-mobi.com 20160619 end
 
     #MATV
     chmod 0660 /dev/MATV
@@ -690,8 +635,6 @@ on post-fs-data
 on boot
     write /proc/bootprof "INIT:boot"
 
-# default is root radio 0440
-    chmod 0644 /proc/cmdline
 
     write /proc/sys/vm/dirty_writeback_centisecs 300
     chmod 0660 /sys/power/autosleep
@@ -722,6 +665,7 @@ on boot
     chmod 0660 /sys/kernel/debug/ged/hal/vsync_offset_level
     chown system system /sys/kernel/debug/ged/hal/event_notify
     chmod 0660 /sys/kernel/debug/ged/hal/event_notify
+    chown media media /sys/kernel/debug/ged/hal/media_event
     chown system system /sys/kernel/debug/ged/hal/custom_upbound_gpu_freq
     chmod 0660 /sys/kernel/debug/ged/hal/custom_upbound_gpu_freq
     chown system system /sys/kernel/debug/ged/hal/custom_boost_gpu_freq
@@ -825,17 +769,7 @@ on property:vold.decrypt=trigger_restart_framework
     start sysenv_daemon
     start start_modem
     start msensord
-#<--[SM31][Sensors][JasonHsing] G-sensor mxc400x daemon porting 20161221 BEGIN --
-    #start memsicp
-#-->[SM31][Sensors][JasonHsing] G-sensor mxc400x daemon porting 20161221 END --
-#<--[SM31][Sensors][JasonHsing] M-sensor memsic3630 driver porting 20161004 BEGIN --
-    start memsicd3630x
-#-->[SM31][Sensors][JasonHsing] M-sensor memsic3630 driver porting 20161004 END --
     start permission_check
-#//<2015/11/30-ychuang, [S1] Fix ta restore issue.
-    start ta_sync_md
-    start update_ta_info
- #//<2015/11/30-ychuang.
 
 on property:vold.decrypt=trigger_shutdown_framework
     write /proc/bootprof "INIT:vold.decrypt=trigger_shutdown_framework"
@@ -926,9 +860,6 @@ service bugreport /system/bin/dumpstate -d -p -B \
 on property:sys.boot_completed=1
     start ged_srv
 
-on property:sys.boot_completed=1
-    write /proc/hps/enabled 1
-
 service ged_srv /vendor/bin/ged_srv
     class core
     user system
@@ -942,7 +873,7 @@ service netdiag /vendor/bin/netdiag
 service nvram_daemon /vendor/bin/nvram_daemon
     class main
     user root
-    group system trimarea
+    group system
     oneshot
 
 service sysenv_daemon /vendor/bin/sysenv_daemon
@@ -957,17 +888,13 @@ service atci_service /vendor/bin/atci_service
     socket atci-serv-fw stream 660 radio system
     user root
     disabled
-#//<2016/10/27-ychuang,[S1][SM31] Fix AT+RFBACKUP backup bt nvram error.
-    group radio system trimarea net_bt_stack
-#//<2016/10/27-ychuang.
+    group radio system
 
 service atcid-daemon-u /vendor/bin/atcid
     class main
     socket adb_atci_socket stream 660 radio system
     user system
-#//<2016/10/27-ychuang,[S1][SM31] Fix AT+RFBACKUP backup bt nvram error.
-    group radio system media trimarea net_bt_stack
-#//<2016/10/27-ychuang.
+    group radio system media
     disabled
     oneshot
 
@@ -975,20 +902,9 @@ service atcid-daemon-e /vendor/bin/atcid
     class core
     socket adb_atci_socket stream 660 radio system
     user root
-#//<2016/10/27-ychuang,[S1][SM31] Fix AT+RFBACKUP backup bt nvram error.
-    group radio system trimarea net_bt_stack
-#//<2016/10/27-ychuang.
+    group radio system
     disabled
     oneshot
-
-
-#to set sbp code
-service modemsbp2 /system/bin/modemsbp_con2
-	  class main
-	  user root
-	  group root system
-	  oneshot
-
 
 on property:ro.build.type=eng
 start atci_service
@@ -1319,23 +1235,6 @@ service memsicd3416x /vendor/bin/memsicd3416x
 	 user system
     group system
     class main
-#<--[SM31][Sensors][JasonHsing] G-sensor mxc400x daemon porting 20161221 BEGIN --
-#service memsicp /vendor/bin/memsicp
-#     disabled
-#	 user system
-#    group system
-#    class main
-#-->[SM31][Sensors][JasonHsing] G-sensor mxc400x daemon porting 20161221 END --
-#<--[SM31][Sensors][JasonHsing] M-sensor memsic3630 driver porting 20161004 BEGIN --
-service memsicd3630x /vendor/bin/memsicd3630x
-#<---[SM31][Sensors][JasonHsing] Fix M-sensor issue on Disable FDE(Full Disk Encryption) 20170103 BEGIN --
-#     disabled
-#--->[SM31][Sensors][JasonHsing] Fix M-sensor issue on Disable FDE(Full Disk Encryption) 20170103 END --
-	 user system
-    group system
-    class main
-#-->[SM31][Sensors][JasonHsing] M-sensor memsic3630 driver porting 20161004 END --
-	
 service akmd8975 /vendor/bin/akmd8975
     disabled
     user system
@@ -1353,13 +1252,6 @@ service akmd09911 /vendor/bin/akmd09911
     user system
     group system
     class main
-#<--[SM31][Sensors][JasonHsing] M-sensor akm09918 driver porting 20161201 --
-service akmd09918 /vendor/bin/akmd09918
-    disabled
-    user system
-    group system
-    class main
-#-->[SM31][Sensors][JasonHsing] M-sensor akm09918 driver porting 20161201 --
 service bmm050d /vendor/bin/bmm050d
     disabled
     user system
@@ -1465,18 +1357,16 @@ service thermald /vendor/bin/thermald
     user system
     group system
 
-# [Arima_8100][bozhi_lin] softcharge data process in softchargd not in fuelgauged to prevent battery show -1 20170428 begin
-service softcharged /vendor/bin/softcharged
-    class main
-    user system
-    group system trimarea
-    oneshot
-# [Arima_8100][bozhi_lin] 20170428 end
-
 service fuelgauged /vendor/bin/fuelgauged
     class main
     user system
     group system
+
+service sn /vendor/bin/sn
+    class late_start
+    user system
+    group system sdcard_rw
+    oneshot
 
 #add for power-off alarm
 service poad /vendor/bin/poad
@@ -1629,6 +1519,10 @@ service usp_service /vendor/bin/usp_service
     group root system radio
     disabled
     oneshot
+service fingerprintd /system/bin/fingerprintd
+    class late_start
+    user system
+    group system
 
 on property:persist.mtk_usp_native_start=1
     start usp_service
@@ -1651,59 +1545,3 @@ on property:debug.mtk.thermalindicator=0
 
 on property:debug.mtk.thermalindicator=1
 	start ThermalIndicator
-
-# Create directory for font change support
-    exec u:r:font_selector_make_dir:s0 system -- /system/bin/font-selector-make-dir.sh
-
-# [Arima_8100][bozhi_lin] FP22589: Battery Swelling mitigation for retail demo units 20161027 begin
-on property:persist.service.battery.charge=0
-    write /sys/class/power_supply/battery/enable_llk 0
-
-on property:persist.service.battery.charge=1
-    write /sys/class/power_supply/battery/enable_llk 1
-# [Arima_8100][bozhi_lin] 20161027 end
-
-# [Arima_8100][bozhi_lin] RID001582 - Soft charge 3.0 20161123 begin
-on property:ro.arima.sc3_20_init_time=*
-    write /sys/class/power_supply/battery/sc3_20_init_time ${ro.arima.sc3_20_init_time}
-
-on property:ro.arima.sc3_30_init_time=*
-    write /sys/class/power_supply/battery/sc3_30_init_time ${ro.arima.sc3_30_init_time}
-
-on property:ro.arima.sc3_40_init_time=*
-    write /sys/class/power_supply/battery/sc3_40_init_time ${ro.arima.sc3_40_init_time}
-# [Arima_8100][bozhi_lin] 20161123 end
-
-# [Arima_8100][bozhi_lin] RID003588 Battery Health test in the Service Menu 20161130 begin
-# [Arima_8100][bozhi_lin] RID003588 Battery Health test in the Service Menu 20161124 begin
-on property:ro.arima.fcc_mah_0=*
-    write /sys/class/power_supply/battery/sc3_fcc_mah_0 ${ro.arima.fcc_mah_0}
-
-on property:ro.arima.fcc_mah_1=*
-    write /sys/class/power_supply/battery/sc3_fcc_mah_1 ${ro.arima.fcc_mah_1}
-
-on property:ro.arima.fcc_mah_2=*
-    write /sys/class/power_supply/battery/sc3_fcc_mah_2 ${ro.arima.fcc_mah_2}
-
-on property:ro.arima.fcc_mah_3=*
-    write /sys/class/power_supply/battery/sc3_fcc_mah_3 ${ro.arima.fcc_mah_3}
-
-on property:ro.arima.fcc_mah_4=*
-    write /sys/class/power_supply/battery/sc3_fcc_mah_4 ${ro.arima.fcc_mah_4}
-# [Arima_8100][bozhi_lin] 20161124 end
-# [Arima_8100][bozhi_lin] 20161130 end
-
-# [Arima_8100][bozhi_lin] add battery_monitor for debug 20161201 begin
-service ArimaBatMonLog /system/bin/battery_monitor -d enable
-    user root
-    group root
-    disabled
-    seclabel u:r:battery_monitor:s0
-
-on property:persist.batterymonitor.log=true
-    mkdir /data/battery_debug 0777 system system
-    start ArimaBatMonLog
-
-on property:persist.batterymonitor.log=false
-    stop ArimaBatMonLog
-# [Arima_8100][bozhi_lin] 20161201 end

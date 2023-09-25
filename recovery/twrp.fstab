@@ -1,7 +1,5 @@
 # mount point	fstype    device    	[device2]
 /preloader               emmc   /dev/block/mmcblk0boot1  flags=display="Preloader";backup=1;flashimg=1
-/ta                     emmc   /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/ta     flags=display="TA";backup=1;flashimg=1
-
 /boot			emmc	/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/boot	flags=display="Boot";backup=1;flashimg=1
 /cache			ext4	/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/cache	flags=display="Cache";backup=1;wipeingui;wipeduringfactoryreset
 /lk			emmc	/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/lk	flags=display="Uboot";backup=1;flashimg=1
@@ -26,5 +24,4 @@
 /system			ext4	/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/system    flags=display="System";backup=1;wipeingui
 /system			emmc	/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/system    flags=display="Systemimg";backup=1;flashimg=1
 /data			ext4	/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/userdata	flags=length=-16384;encryptable=/dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/metadata;display="Data";backup=1;wipeingui;wipeduringfactoryreset;
-/oem                   ext4     /dev/block/platform/mtk-msdc.0/11230000.msdc0/by-name/oem    flags=display="OEM";backup=1;wipeingui;flashimg=1
 /external_sd		auto	/dev/block/mmcblk1p1	/dev/block/mmcblk1	flags=display="External SDcard";storage;wipeingui;removable;backup=0
