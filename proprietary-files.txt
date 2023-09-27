@@ -137,7 +137,7 @@ vendor/lib/libatvctrlservice.so
 vendor/lib/libaudio_param_parser.so
 vendor/lib/libaudiocompensationfilter.so
 vendor/lib/libaudiocomponentengine.so
-vendor/lib/libaudiocustparam.so
+-vendor/lib/libaudiocustparam.so
 vendor/lib/libaudiodcrflt.so
 vendor/lib/libaudiomtkdcremoval.so
 vendor/lib/libaudiosetting.so
@@ -192,7 +192,7 @@ vendor/lib/libcustom_nvram.so
 vendor/lib/libcustom_prop.so
 vendor/lib/libcvsd_mtk.so
 vendor/lib/libdirect-coredump.so
-vendor/lib/libdpframework.so
+-vendor/lib/libdpframework.so
 vendor/lib/libdrmmtkutil.so
 vendor/lib/libdrmmtkwhitelist.so
 vendor/lib/libem_audio_jni.so
@@ -221,7 +221,7 @@ vendor/lib/libimageio_plat_drv.so
 vendor/lib/libimsma.so
 vendor/lib/libimsma_rtp.so
 vendor/lib/libimsma_socketwrapper.so
-vendor/lib/libion_mtk.so
+-vendor/lib/libion_mtk.so
 vendor/lib/libjni_pq.so
 vendor/lib/liblic_divx.so
 vendor/lib/liblic_s263.so
@@ -257,7 +257,7 @@ vendor/lib/libmtk_vt_service.so
 vendor/lib/libmtk_vt_swip.so
 vendor/lib/libmtk_vt_utils.so
 vendor/lib/libmtk_vt_wrapper.so
-vendor/lib/libmtkcam_fwkutils.so
+-vendor/lib/libmtkcam_fwkutils.so
 vendor/lib/libmtkjpeg.so
 vendor/lib/libmtklimiter.so
 vendor/lib/libmtkplayer.so
@@ -334,7 +334,7 @@ vendor/lib64/libatvctrlservice.so
 vendor/lib64/libaudio_param_parser.so
 vendor/lib64/libaudiocompensationfilter.so
 vendor/lib64/libaudiocomponentengine.so
-vendor/lib64/libaudiocustparam.so
+-vendor/lib64/libaudiocustparam.so
 vendor/lib64/libaudiodcrflt.so
 vendor/lib64/libaudiosetting.so
 vendor/lib64/libaudiotoolkit.so
@@ -386,7 +386,7 @@ vendor/lib64/libcustom_nvram.so
 vendor/lib64/libcustom_prop.so
 vendor/lib64/libcvsd_mtk.so
 vendor/lib64/libdirect-coredump.so
-vendor/lib64/libdpframework.so
+-vendor/lib64/libdpframework.so
 vendor/lib64/libdrmmtkutil.so
 vendor/lib64/libdrmmtkwhitelist.so
 vendor/lib64/libem_audio_jni.so
@@ -413,7 +413,7 @@ vendor/lib64/libimageio_plat_drv.so
 vendor/lib64/libimsma.so
 vendor/lib64/libimsma_rtp.so
 vendor/lib64/libimsma_socketwrapper.so
-vendor/lib64/libion_mtk.so
+-vendor/lib64/libion_mtk.so
 vendor/lib64/libjni_pq.so
 vendor/lib64/libm4u.so
 vendor/lib64/libmal.so
@@ -438,7 +438,7 @@ vendor/lib64/libmsbc_mtk.so
 vendor/lib64/libmtk_drvb.so
 vendor/lib64/libmtk_mmutils.so
 vendor/lib64/libmtk_vt_wrapper.so
-vendor/lib64/libmtkcam_fwkutils.so
+-vendor/lib64/libmtkcam_fwkutils.so
 vendor/lib64/libmtkjpeg.so
 vendor/lib64/libmtklimiter.so
 vendor/lib64/libmtkplayer.so

@@ -44,5 +44,7 @@ write_headers
 
 write_makefiles "$MY_DIR"/proprietary-files.txt
 
+sed -i 's/ifeq ($(TARGET_DEVICE),mt6737-common)/ifneq ($(filter X008 X008_1,$(TARGET_DEVICE)),)/g' "$CM_ROOT"/vendor/asus/mt6737-common/Android.mk
+
 # Finish
 write_footers
