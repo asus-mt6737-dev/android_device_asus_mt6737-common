@@ -107,6 +107,7 @@ PRODUCT_PACKAGES += \
 
 # GPS
 PRODUCT_PACKAGES += \
+    gps.$(TARGET_BOARD_PLATFORM) \
     libcurl
 
 PRODUCT_COPY_FILES += \
@@ -133,6 +134,10 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/etc/init/mediaserver.rc:system/etc/init/mediaserver.rc \
     $(DEVICE_PATH)/configs/etc/init/surfaceflinger.rc:system/etc/init/surfaceflinger.rc
 
+# Lights
+PRODUCT_PACKAGES += \
+    lights.$(TARGET_BOARD_PLATFORM)
+
 # Local time
 PRODUCT_PACKAGES += \
     local_time.default
@@ -154,6 +159,10 @@ PRODUCT_PACKAGES += \
 # Network
 PRODUCT_PACKAGES += \
     netd
+
+# Power
+PRODUCT_PACKAGES += \
+    power.$(TARGET_BOARD_PLATFORM)
 
 # Properties
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
