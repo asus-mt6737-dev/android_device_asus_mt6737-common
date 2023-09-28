@@ -132,7 +132,8 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/etc/init/mediacodec.rc:system/etc/init/mediacodec.rc \
     $(DEVICE_PATH)/configs/etc/init/mediadrmserver.rc:system/etc/init/mediadrmserver.rc \
     $(DEVICE_PATH)/configs/etc/init/mediaserver.rc:system/etc/init/mediaserver.rc \
-    $(DEVICE_PATH)/configs/etc/init/surfaceflinger.rc:system/etc/init/surfaceflinger.rc
+    $(DEVICE_PATH)/configs/etc/init/surfaceflinger.rc:system/etc/init/surfaceflinger.rc \
+    $(DEVICE_PATH)/configs/etc/init/init.debugrom.rc:system/etc/init/init.debugrom.rc
 
 # Kernel
 LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
