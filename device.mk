@@ -134,6 +134,9 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/etc/init/mediaserver.rc:system/etc/init/mediaserver.rc \
     $(DEVICE_PATH)/configs/etc/init/surfaceflinger.rc:system/etc/init/surfaceflinger.rc
 
+# Kernel
+LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
+
 # Lights
 PRODUCT_PACKAGES += \
     lights.$(TARGET_BOARD_PLATFORM)
