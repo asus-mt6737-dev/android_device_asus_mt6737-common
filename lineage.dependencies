@@ -6,6 +6,12 @@
     "revision":    "cm-14.1"
   },
   {
+    "target_path": "packages/resources/devicesettings",
+    "repository":  "LineageOS/android_packages_resources_devicesettings",
+    "remote":      "github",
+    "revision":    "cm-14.1"
+  },
+  {
     "target_path": "vendor/asus/mt6737-common",
     "repository":  "asus-mt6737-dev/android_vendor_asus_mt6737-common",
     "remote":      "github",
